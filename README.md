@@ -65,6 +65,7 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 composer require laravel/ui
 php artisan ui bootstrap --auth
+composer require surfsidemedia/shoppingcart
 
 ## License
 
