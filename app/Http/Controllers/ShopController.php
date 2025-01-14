@@ -8,11 +8,38 @@ use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::orderBy('created_at', 'DESC')->paginate(12);
+        $size = $request->query('size') ?: 12;
+        $oColumn = '';
+        $oOrder = '';
+        $order = $request->query('order') ?: -1;
 
-        return view('shop', compact('products'));
+        switch ($order) {
+            case 1:
+                $oColumn = 'created_at';
+                $oOrder = 'DESC';
+                break;
+            case 2:
+                $oColumn = 'created_at';
+                $oOrder = 'ASC';
+                break;
+            case 3:
+                $oColumn = 'sale_price';
+                $oOrder = 'DESC';
+                break;
+            case 3:
+                $oColumn = 'sale_price';
+                $oOrder = 'ASC';
+                break;
+            default:
+                $oColumn = 'id';
+                $oOrder = 'DESC';
+        }
+
+        $products = Product::orderBy($oColumn, $oOrder)->paginate($size);
+
+        return view('shop', compact('products', 'size', 'order'));
     }
 
     public function product_details($productSlug)
