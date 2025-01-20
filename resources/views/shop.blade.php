@@ -16,7 +16,13 @@
             border-radius: 0;
             margin-right: 0.75rem;
         }
+
+        .filled-heart {
+            color: red;
+            fill: red;
+        }
     </style>
+
     <main class="pt-90">
         <section class="shop-main container d-flex pt-4 pt-xl-5">
             <div class="shop-sidebar side-sticky bg-body" id="shopFilter">
@@ -63,7 +69,6 @@
                     </div>
                 </div>
 
-
                 <div class="accordion" id="color-filters">
                     <div class="accordion-item mb-4 pb-3">
                         <h5 class="accordion-header" id="accordion-heading-1">
@@ -100,7 +105,6 @@
                         </div>
                     </div>
                 </div>
-
 
                 <div class="accordion" id="size-filters">
                     <div class="accordion-item mb-4 pb-3">
@@ -140,7 +144,6 @@
                     </div>
                 </div>
 
-
                 <div class="accordion" id="brand-filters">
                     <div class="accordion-item mb-4 pb-3">
                         <h5 class="accordion-header" id="accordion-heading-brand">
@@ -178,7 +181,6 @@
                         </div>
                     </div>
                 </div>
-
 
                 <div class="accordion" id="price-filters">
                     <div class="accordion-item mb-4">
@@ -463,14 +465,40 @@
                                         <span class="reviews-note text-lowercase text-secondary ms-1">8k+ reviews</span>
                                     </div>
 
-                                    <button
-                                        class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
-                                        title="Add To Wishlist">
-                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <use href="#icon_heart" />
-                                        </svg>
-                                    </button>
+                                    @if (Cart::instance('wishlist')->content()->where('id', $product->id)->count() > 0)
+                                        <form
+                                            action="{{ route('wishlist.item.remove', ['rowId' => Cart::instance('wishlist')->content()->where('id', $product->id)->first()->rowId]) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button
+                                                class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist filled-heart"
+                                                title="Remove From Wishlist" type="submit">
+                                                <svg width="16" height="16" viewBox="0 0 20 20" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <use href="#icon_heart" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <form method="POST" action="{{ route('wishlist.add') }}">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $product->id }}">
+                                            <input type="hidden" name="name" value="{{ $product->name }}">
+                                            <input type="hidden" name="quantity" value="1">
+                                            <input type="hidden" name="price"
+                                                value="{{ $product->sale_price == '' ? $product->regular_price : $product->sale_price }}">
+
+                                            <button
+                                                class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
+                                                title="Add To Wishlist">
+                                                <svg width="16" height="16" viewBox="0 0 20 20" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <use href="#icon_heart" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </div>
                         </div>
