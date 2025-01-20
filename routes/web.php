@@ -25,9 +25,10 @@ Route::delete('/cart/remove/{rowId}', [CartController::class, 'remove_item'])->n
 Route::delete('/cart/clear', [CartController::class, 'empty_item'])->name('cart.empty');
 
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-Route::post('/wishlist/add', [WishListController::class, 'add_to_wishlist'])->name('wishlist.add');
-Route::delete('/wishlist/item/remove/{rowId}', [WishListController::class, 'remove_item'])->name('wishlist.item.remove');
-Route::delete('/wishlist/clear', [WishListController::class, 'empty_wishlist'])->name('wishlist.item.clear');
+Route::post('/wishlist/add', [WishlistController::class, 'add_to_wishlist'])->name('wishlist.add');
+Route::delete('/wishlist/item/remove/{rowId}', [WishlistController::class, 'remove_item'])->name('wishlist.item.remove');
+Route::delete('/wishlist/clear', [WishlistController::class, 'empty_wishlist'])->name('wishlist.item.clear');
+Route::post('/wishlist/move-to-cart/{rowId}', [WishlistController::class, 'move_to_cart'])->name('wishlist.move.to.cart');
 
 Route::middleware('auth')->group(function () {
     Route::get('/account-dashboard', [UserController::class, 'index'])->name('user.index');
